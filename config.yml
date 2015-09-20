@@ -1,0 +1,25 @@
+---
+#
+# Global configuration file
+#
+
+######### LemonLDAP Section ################
+# In this section we found all informations
+# about the LemonLDAP role
+############################################
+## LemonLDAP Domain
+# There we can specify the domain which used
+# by lemonLDAP
+lemonldap_domain: "example.com"
+
+## LemonLDAP urls
+# There we can specify the application urls 
+# used by LemonLDAP
+lemonldap_url_portal: "auth.example.com"
+lemonldap_url_manager: "manager.example.com"
+lemonldap_url_reload: "reload.example.com"
+
+# EPEL URLs
+epel_repo_url: "http://download.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+epel_repo_gpg_key_url: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+enable_upgrade: "yes"

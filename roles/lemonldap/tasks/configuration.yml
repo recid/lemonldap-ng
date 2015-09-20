@@ -1,0 +1,51 @@
+---
+- name: Creating LemonLDAP configuration directory
+  file: path=/etc/lemonldap state=directory
+  tags:
+    - lemonldap
+
+- name: Enabling Apache Module
+  apache2_module: name="{{ item }}"
+  with_items:
+    - rewrite
+    - proxy
+    - proxy_http
+  notify:
+    - Reloading Apache Configuration
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - lemonldap
+
+- name: Unprotecting Manager Interface
+  lineinfile: >
+    dest=/etc/lemonldap-ng/lemonldap-ng.ini
+    state=present
+    line=";protection = manager"
+    regexp='protection = manager'
+    insertafter='^;?protection = manager'
+  tags:
+    - lemonldap
+
+- name: Setting the 644 rights on lemonldap-ng.ini
+  file:
+    name=/etc/lemonldap-ng/lemonldap-ng.ini
+    mode=0644
+  tags:
+    - lemonldap
+
+
+- name: Enabling Multiple Vhost on port 80
+  replace: >
+    dest=/etc/httpd/conf/httpd.conf
+    replace="NameVirtualHost *:80"
+    regexp="^#NameVirtualHost \*:80$"
+  when: ansible_pkg_mgr == "yum"
+  register: vhost_enabled
+  tags:
+    - lemonldap
+
+- name: Restarting Apache Server
+  service: name=httpd state=restarted enabled=yes
+  when: ansible_pkg_mgr == "yum" and vhost_enabled.changed
+  tags:
+    - lemonldap

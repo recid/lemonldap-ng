@@ -1,0 +1,44 @@
+---
+- name: Importing the YUM repository key
+  rpm_key: state=present key="http://lemonldap-ng.org/_media/rpm-gpg-key-ow2"
+  when: ansible_pkg_mgr == "yum"
+  tags:
+    - lemonldap
+
+- name: Importing the DEB repository key
+  apt_key: url=http://lemonldap-ng.org/_media/rpm-gpg-key-ow2
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - lemonldap
+
+- name: Installing YUM lemonldap prerequistes
+  yum: name="{{ item }}" state=present
+  with_items: common_packages_list
+  when: ansible_pkg_mgr == "yum"
+  tags:
+    - lemonldap
+
+- name: Installing DEB lemonldap prerequistes
+  apt: name="{{ item }}" state=present force=yes update_cache=yes
+  with_items: common_packages_list
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - lemonldap
+
+- name: Installing YUM lemonldap
+  yum: name={{ item }} state=present
+  with_items:
+    - lemonldap-ng
+    - lemonldap-ng-fr-doc
+  when: ansible_pkg_mgr == "yum"
+  tags:
+    - lemonldap
+
+- name: Installing DEB lemonldap
+  apt: name={{ item }} state=present 
+  with_items:
+    - lemonldap-ng
+    - lemonldap-ng-fr-doc
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - lemonldap

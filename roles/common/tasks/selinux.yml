@@ -1,0 +1,12 @@
+---
+- name: Disabling SElinux on the boot
+  selinux: state=disabled
+  when: ansible_pkg_mgr == 'yum'
+  tags:
+      - common
+
+- name: Disabling SELinux now
+  shell: setenforce 0
+  when: ansible_pkg_mgr == 'yum'
+  tags:
+      - common

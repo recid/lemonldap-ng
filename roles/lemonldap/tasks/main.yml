@@ -1,0 +1,7 @@
+---
+ - include: repositories.yml
+ - include: include_vars.yml
+ - include: flush.yml
+ - include: packages.yml
+ - include: apache.yml
+ - include: configuration.yml

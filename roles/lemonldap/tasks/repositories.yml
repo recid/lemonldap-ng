@@ -1,0 +1,16 @@
+---
+- name: Deploying the YUM LemonLDAP repository
+  template:
+    src=lemonldap-ng.repo
+    dest=/etc/yum.repos.d/
+  when: ansible_pkg_mgr == "yum"
+  tags:
+    - lemonldap
+
+- name: Deploying the DEB LemonLDAP repository
+  copy:
+    src=lemonldap-ng.list
+    dest=/etc/apt/sources.list.d/
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - lemonldap

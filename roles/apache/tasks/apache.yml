@@ -1,0 +1,36 @@
+---
+- name: Disabling The Apache Signature
+  replace: >
+    dest=/etc/apache2/conf.d/security
+    replace="ServerTokens Prod"
+    regexp="^ServerTokens OS$"
+  when: ansible_pkg_mgr == "apt"
+  tags: 
+    - apache
+
+- name: Disabling The Apache Signature
+  replace: >
+    dest=/etc/httpd/conf/httpd.conf
+    replace="ServerTokens Prod"
+    regexp="^ServerTokens OS$"
+  when: ansible_pkg_mgr == "yum"
+  tags: 
+    - apache
+
+- name: Disabling The OS Information
+  replace: >
+    dest=/etc/apache2/conf.d/security
+    replace="ServerSignature Off"
+    regexp="^ServerSignature On$"
+  when: ansible_pkg_mgr == "apt"
+  tags: 
+    - apache2
+
+- name: Disabling The OS Information
+  replace: >
+    dest=/etc/httpd/conf/httpd.conf
+    replace="ServerSignature Off"
+    regexp="^ServerSignature On$"
+  when: ansible_pkg_mgr == "yum"
+  tags: 
+    - apache

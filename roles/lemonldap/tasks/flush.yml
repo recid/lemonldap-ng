@@ -1,0 +1,5 @@
+---
+- name: Flushing handlers
+  meta: flush_handlers
+  tags:
+    - lemonldap

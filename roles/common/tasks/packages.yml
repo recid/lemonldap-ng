@@ -1,0 +1,14 @@
+---
+- name: Installing some packages
+  apt: name="{{ item }}" state=present force=yes update_cache=yes
+  with_items: common_packages_list
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - common
+
+- name: Installing some packages
+  yum: name="{{ item }}" state=present
+  with_items: common_packages_list
+  when: ansible_pkg_mgr == "yum"
+  tags:
+    - common

@@ -1,0 +1,33 @@
+---
+- name: Installing EPEL repository
+  yum: name="{{ epel_repo_url}}" state=present
+  when: ansible_pkg_mgr == "yum"
+  tags:
+   - common
+
+- name: Importing EPEL GPG Key
+  rpm_key: key="{{ epel_repo_gpg_key_url }}" state=present
+  when: ansible_pkg_mgr == "yum"
+  tags:
+   - common
+
+- name: Upgrading all packages
+  yum: name=* state=latest
+  when: ansible_pkg_mgr == "yum" and enable_upgrade == "yes"
+  tags:
+   - common
+
+- name: Upgrading all packages
+  apt: upgrade=dist
+  when: ansible_pkg_mgr == "apt" and enable_upgrade == "yes"
+  tags:
+   - common
+
+
+- name: Stop IPTables services
+  service: name="{{ item }}" state=stopped enabled=no
+  with_items:
+    - "{{ iptables_services }}"
+  when: ansible_pkg_mgr == "yum"
+  tags:
+    - common

@@ -1,0 +1,24 @@
+---
+- name: Restarting Apache
+  service: name=apache2 state=restarted
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - lemonldap
+
+- name: Restarting Apache
+  service: name=httpd state=restarted
+  when: ansible_pkg_mgr == "yum"
+  tags:
+    - lemonldap
+
+- name: Reloading Apache Configuration
+  service: name=apache2 state=reloaded
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - lemonldap
+
+- name: Reloading Apache Configuration
+  service: name=httpd state=reloaded
+  when: ansible_pkg_mgr == "yum"
+  tags:
+    - lemonldap

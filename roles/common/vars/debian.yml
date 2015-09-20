@@ -1,0 +1,20 @@
+---
+common_packages_list:
+  - vim
+  - mlocate
+  - wget
+  - curl
+  - htop
+  - atop
+  - rsync
+  - bind9utils
+  - openssl
+  - zip
+  - unzip
+  - sshpass
+  - openssh-client
+  - telnet
+  - python-selinux
+
+iptables_services:
+  - iptables-persistent

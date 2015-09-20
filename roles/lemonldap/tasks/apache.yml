@@ -1,0 +1,89 @@
+---
+#- name: LemonLDAP Domain Configuration 
+#  shell: "sed -i \"s/example.com/{{ lemonldap_domain }}/g\" /etc/lemonldap-ng/* /var/lib/lemonldap-ng/conf/lmConf-1 /var/lib/lemonldap-ng/test/index.pl"
+#  tags:
+#    - lemonldap
+
+- name: LemonLDAP Domain Configuration
+  replace: >
+    dest="{{ item }}"
+    replace="{{ lemonldap_domain }}"
+    regexp="example.com"
+  with_items:
+    - /etc/lemonldap-ng/handler-apache2.conf
+    - /etc/lemonldap-ng/portal-apache2.conf
+    - /etc/lemonldap-ng/manager-apache2.conf
+    - /etc/lemonldap-ng/for_etc_hosts
+    - /etc/lemonldap-ng/lemonldap-ng.ini
+    - /etc/lemonldap-ng/test-apache2.conf
+    - /var/lib/lemonldap-ng/conf/lmConf-1
+    - /var/lib/lemonldap-ng/test/index.pl
+  tags:
+    - lemonldap
+
+
+- name: Enabling Apache modules
+  apache2_module: name={{ item }}
+  with_items:
+    - headers
+  when: ansible_pkg_mgr == "apt"
+  tags:
+    - lemonldap
+
+- name: Enabling Apache Sites
+  file: >
+    src=/etc/apache2/sites-available/{{ item.name_src }}
+    dest=/etc/apache2/sites-enabled/{{ item.name_dst }}
+    state=link
+  with_items:
+    - { name_src: 'handler-apache2.conf', name_dst: '0000-handler-apache2.conf' }
+    - { name_src: 'portal-apache2.conf', name_dst: '0001-portal-apache2.conf' }
+    - { name_src: 'manager-apache2.conf', name_dst: '0002-manager-apache2.conf' }
+  when: ansible_pkg_mgr == "apt"
+  notify:
+    - Restarting Apache
+  tags: 
+    - lemonldap
+
+- name: Disabling Apache Sites
+  file: >
+    path=/etc/httpd/conf.d/{{ item }}
+    state=absent
+  with_items:
+    - z-lemonldap-ng-handler.conf
+    - z-lemonldap-ng-manager.conf
+    - z-lemonldap-ng-portal.conf
+    - z-lemonldap-ng-test.conf
+  when: ansible_pkg_mgr == "yum"
+  notify:
+    - Restarting Apache
+  tags:
+    - lemonldap
+
+ 
+- name: Enabling Apache Sites
+  file: >
+    src=/etc/lemonldap-ng/{{ item.name_src }}
+    dest=/etc/httpd/conf.d/{{ item.name_dst }}
+    state=link
+  with_items:
+    - { name_src: 'handler-apache2.conf', name_dst: '0000-handler-apache2.conf' }
+    - { name_src: 'portal-apache2.conf', name_dst: '0001-portal-apache2.conf' }
+    - { name_src: 'manager-apache2.conf', name_dst: '0002-manager-apache2.conf' }
+  when: ansible_pkg_mgr == "yum"
+  notify:
+    - Restarting Apache
+  tags: 
+    - lemonldap
+
+- name: Flushing handlers
+  meta: flush_handlers
+  tags:
+    - lemonldap
+
+- name: Adding the internal resolution
+  shell: "cat /etc/lemonldap-ng/for_etc_hosts >> /etc/hosts && touch /root/hosts.done"
+  args:
+    creates: /root/hosts.done
+  tags: 
+    - lemonldap

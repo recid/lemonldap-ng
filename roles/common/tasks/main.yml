@@ -1,0 +1,5 @@
+---
+- include: include_vars.yml
+- include: init.yml
+- include: packages.yml
+- include: selinux.yml
