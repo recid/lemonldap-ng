@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: Cédric Liard
+  description: Quick and easy LemonLDAP-NG software installer
+  company:
+  licence: GPLv3
+  min_ansible_version: 1.9
+  platforms:
+  - name: Debian
+    versions:
+    - wheezy
+  - name: CentOS
+    versions:
+    - 6.x
+  categories:
+    - web
+dependencies:
+ - { role: common }
+ - { role: apache }
