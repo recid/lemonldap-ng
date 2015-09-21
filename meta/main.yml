@@ -9,9 +9,9 @@ galaxy_info:
   - name: Debian
     versions:
     - wheezy
-  - name: CentOS
+  - name: EL
     versions:
-    - 6.x
+    - 6
   categories:
     - web
 dependencies:
