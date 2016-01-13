@@ -8,5 +8,6 @@
 - name: Disabling SELinux now
   shell: setenforce 0
   when: ansible_pkg_mgr == 'yum'
+  failed_when: false
   tags:
       - common

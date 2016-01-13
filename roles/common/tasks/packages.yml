@@ -7,7 +7,7 @@
     - common
 
 - name: Installing some packages
-  yum: name="{{ item }}" state=present
+  yum: name="{{ item }}" state=present update_cache=yes
   with_items: common_packages_list
   when: ansible_pkg_mgr == "yum"
   tags:

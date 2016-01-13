@@ -2,6 +2,7 @@
 - name: Installing EPEL repository
   yum: name="{{ epel_repo_url}}" state=present
   when: ansible_pkg_mgr == "yum"
+  failed_when: false
   tags:
    - common
 
@@ -29,5 +30,6 @@
   with_items:
     - "{{ iptables_services }}"
   when: ansible_pkg_mgr == "yum"
+  failed_when: false
   tags:
     - common
