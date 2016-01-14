@@ -21,6 +21,62 @@
   tags:
     - lemonldap
 
+- name: Configure the Portal URL/Vhost/DNS
+  replace: >
+    dest="{{ item }}"
+    replace={{ lemonldap_url_portal }}
+    regexp="auth.{{ lemonldap_domain }}"
+  with_items:
+    - "{{ handler_conf }}"
+    - "{{ portal_conf }}"
+    - "{{ manager_conf }}"
+    - "{{ test_conf }}"
+    - /etc/lemonldap-ng/for_etc_hosts
+    - /etc/lemonldap-ng/lemonldap-ng.ini
+    - /var/lib/lemonldap-ng/conf/lmConf-1
+    - /var/lib/lemonldap-ng/test/index.pl
+  register: portal
+  tags:
+    - lemonldap
+
+
+- name: Configure the Manager URL/Vhost/DNS
+  replace: >
+    dest="{{ item }}"
+    replace={{ lemonldap_url_manager }}
+    regexp="manager.{{ lemonldap_domain }}"
+  with_items:
+    - "{{ handler_conf }}"
+    - "{{ portal_conf }}"
+    - "{{ manager_conf }}"
+    - "{{ test_conf }}"
+    - /etc/lemonldap-ng/for_etc_hosts
+    - /etc/lemonldap-ng/lemonldap-ng.ini
+    - /var/lib/lemonldap-ng/conf/lmConf-1
+    - /var/lib/lemonldap-ng/test/index.pl
+  register: manager
+  tags:
+    - lemonldap
+
+
+- name: Configure the Reload URL/Vhost/DNS
+  replace: >
+    dest="{{ item }}"
+    replace={{ lemonldap_url_reload }}
+    regexp="reload.{{ lemonldap_domain }}"
+  with_items:
+    - "{{ handler_conf }}"
+    - "{{ portal_conf }}"
+    - "{{ manager_conf }}"
+    - "{{ test_conf }}"
+    - /etc/lemonldap-ng/for_etc_hosts
+    - /etc/lemonldap-ng/lemonldap-ng.ini
+    - /var/lib/lemonldap-ng/conf/lmConf-1
+    - /var/lib/lemonldap-ng/test/index.pl
+  register: reload
+  tags:
+    - lemonldap
+
 
 - name: Enabling Apache modules
   apache2_module: name={{ item }}
@@ -82,7 +138,7 @@
 
 - name: Restarting Apache
   service: name=httpd state=restarted
-  when: ansible_pkg_mgr == "yum" and results.changed
+  when: ansible_pkg_mgr == "yum" and (results.changed or portal.changed or manager.changed or reload.changed)
   tags: 
     - lemonldap
 
