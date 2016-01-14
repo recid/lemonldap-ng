@@ -1,4 +1,5 @@
 # Inventory
 
 [all]
-test
+vm_ansible_debian
+vm_ansible_centos

@@ -1,0 +1,6 @@
+---
+- name: Loading OS specific vars
+  include_vars: roles/common/vars/{{ ansible_os_family|lower }}.yml
+  ignore_errors: true
+  tags:
+    - apache

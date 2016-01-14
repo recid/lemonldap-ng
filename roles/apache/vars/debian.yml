@@ -1,0 +1,2 @@
+---
+security_file: "{% if ansible_distribution_major_version == '8' %}/etc/apache2/conf-available/security.conf{% else %}/etc/apache2/conf.d/security{% endif %}"

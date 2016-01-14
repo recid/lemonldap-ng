@@ -39,3 +39,8 @@ common_packages_list:
     - perl-Cache-Memcached
     - perl-Convert-PEM
     - perl-Mouse
+
+handler_conf: "{% if ansible_distribution_major_version == '7' %}/etc/lemonldap-ng/handler-apache2.4.conf{% else %}/etc/lemonldap-ng/handler-apache2.conf{% endif %}"
+portal_conf: "{% if ansible_distribution_major_version == '7' %}/etc/lemonldap-ng/portal-apache2.4.conf{% else %}/etc/lemonldap-ng/portal-apache2.conf{% endif %}"
+manager_conf: "{% if ansible_distribution_major_version == '7' %}/etc/lemonldap-ng/manager-apache2.4.conf{% else %}/etc/lemonldap-ng/manager-apache2.conf{% endif %}"
+test_conf: "{% if ansible_distribution_major_version == '7' %}/etc/lemonldap-ng/test-apache2.4.conf{% else %}/etc/lemonldap-ng/test-apache2.conf{% endif %}"

@@ -38,3 +38,8 @@ common_packages_list:
     - libunicode-string-perl
     - libconvert-pem-perl
     - libmouse-perl
+
+handler_conf: /etc/lemonldap-ng/handler-apache2.conf
+portal_conf: /etc/lemonldap-ng/portal-apache2.conf
+manager_conf: /etc/lemonldap-ng/manager-apache2.conf
+test_conf: /etc/lemonldap-ng/test-apache2.conf

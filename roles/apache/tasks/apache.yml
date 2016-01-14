@@ -1,7 +1,7 @@
 ---
 - name: Disabling The Apache Signature
   replace: >
-    dest=/etc/apache2/conf.d/security
+    dest={{ security_file }}
     replace="ServerTokens Prod"
     regexp="^ServerTokens OS$"
   when: ansible_pkg_mgr == "apt"
@@ -19,7 +19,7 @@
 
 - name: Disabling The OS Information
   replace: >
-    dest=/etc/apache2/conf.d/security
+    dest={{ security_file }}
     replace="ServerSignature Off"
     regexp="^ServerSignature On$"
   when: ansible_pkg_mgr == "apt"

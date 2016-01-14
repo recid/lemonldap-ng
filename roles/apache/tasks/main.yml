@@ -1,3 +1,4 @@
 ---
+- include: include_vars.yml
 - include: packages.yml
 - include: apache.yml

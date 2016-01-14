@@ -20,3 +20,4 @@ common_packages_list:
 iptables_services:
   - iptables
   - ip6tables
+  - firewalld
